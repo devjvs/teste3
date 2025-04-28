@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vídeo Aula e Menu Lateral</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .menu-item-header {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem 1rem;
+            border-radius: 0.375rem;
+            background-color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0;
+            text-align: left;
+            width: 100%;
+        }
+        .menu-item-header:hover {
+            background-color: #f8fafc;
+        }
+        .menu-item-content {
+            padding: 0.5rem 1rem 1rem 1rem;
+            background-color: white;
+            border-left: 1px solid #e2e8f0;
+            border-right: 1px solid #e2e8f0;
+            border-bottom: 1px solid #e2e8f0;
+            border-bottom-left-radius: 0.375rem;
+            border-bottom-right-radius: 0.375rem;
+            margin-bottom: 0.75rem;
+        }
+        .sub-item {
+            padding: 0.75rem 0.5rem;
+            border-radius: 0.375rem;
+            margin-top: 0.5rem;
+            background-color: #f8fafc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+         .sub-item:hover {
+             background-color: #f1f5f9;
+         }
+         .sub-item-details {
+            padding: 0.75rem 0.5rem 0.75rem 1rem;
+            border-radius: 0.375rem;
+            margin-top: 0.25rem;
+            background-color: #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+         }
+         .sub-item-details:hover {
+             background-color: #cbd5e1;
+         }
+         .download-link {
+             display: inline-flex;
+             align-items: center;
+             color: #6b7280;
+             transition: color 0.2s ease-in-out;
+         }
+         .download-link:hover {
+             color: #1f2937;
+         }
+        /* Botão/Área clicável para o status */
+        .status-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem; /* gap-1 */
+            padding: 0.25rem; /* Adiciona área de clique */
+            border-radius: 0.25rem;
+            transition: background-color 0.2s ease-in-out;
+        }
+        .status-toggle:hover {
+             background-color: #e5e7eb; /* gray-200 */
+        }
+        /* Esconde o ícone de concluído por padrão */
+        .status-toggle .icon-completed {
+            display: none;
+        }
+        /* Mostra o ícone de não concluído por padrão */
+        .status-toggle .icon-not-completed {
+            display: inline-block; /* Ou block */
+        }
+        /* Quando o item está concluído (classe adicionada via JS) */
+        .status-toggle.is-completed .icon-completed {
+            display: inline-block; /* Mostra o checkmark */
+        }
+        .status-toggle.is-completed .icon-not-completed {
+            display: none; /* Esconde o quadrado */
+        }
+
+        .video-container-yt {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            margin-bottom: 1rem;
+        }
+        .video-container-yt iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+        .menu-container {
+             flex-shrink: 0;
+             max-height: calc(100vh - 150px);
+             overflow-y: auto;
+        }
+        .menu-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .menu-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        .menu-container::-webkit-scrollbar-thumb {
+            background: #cccccc;
+            border-radius: 3px;
+        }
+        .menu-container::-webkit-scrollbar-thumb:hover {
+            background: #aaaaaa;
+        }
+        .hidden {
+            display: none;
+        }
+        .rotate-180 {
+            transform: rotate(180deg);
+        }
+        .transition-transform {
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-md py-3 px-4 md:px-8 sticky top-0 z-10">
+        <div class="container mx-auto max-w-full flex justify-between items-center">
+            <div class="flex items-center gap-4 flex-wrap">
+                <button class="flex items-center text-sm text-gray-600 hover:text-gray-900">
+                    <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    Voltar
+                </button>
+                <h1 class="text-lg font-semibold text-gray-700">Semiologia do Zero</h1>
+                <div class="relative inline-block text-left">
+                    <button type="button" class="inline-flex justify-center items-center w-full rounded-md border border-gray-300 shadow-sm px-3 py-1 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
+                        2024
+                        <svg class="-mr-1 ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    </div>
+            </div>
+            <div class="flex items-center gap-4">
+                <button class="text-gray-500 hover:text-red-500">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                </button>
+                </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-full p-4 md:p-8">
+        <div class="flex flex-row flex-wrap gap-6 md:gap-8">
+
+            <div class="w-full md:flex-1 min-w-[300px]">
+                 <div class="video-container-yt">
+                     <iframe
+                        src="https://www.youtube.com/embed/VIDEO_ID_AQUI" /* Substitua por: https://www.youtube.com/embed/VIDEO_ID */
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+                 <p class="mt-4 text-gray-600 text-sm md:text-base">
+                    Descrição ou informações sobre o vídeo. Pode incluir detalhes sobre o conteúdo, instrutor, etc.
+                </p>
+            </div>
+
+            <div class="w-full md:w-[350px] menu-container mt-6 md:mt-0 pr-2">
+
+                <template id="subitem-content-template">
+                    <div class="sub-item">
+                        <span class="text-sm font-medium text-gray-700">Videoaulas (1)</span>
+                        <svg class="w-5 h-5 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div class="sub-item-details">
+                         <div class="flex items-center flex-grow mr-2">
+                             <svg class="w-8 h-8 text-gray-600 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path></svg>
+                             <div class="overflow-hidden"> <div class="text-sm font-medium text-gray-800 truncate">Videoaula Exemplo</div> <div class="text-xs text-gray-500">Estratégia Educacional</div>
+                             </div>
+                         </div>
+                         <a href="#" class="download-link flex-shrink-0" title="Baixar vídeo"> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                         </a>
+                    </div>
+
+                    <div class="sub-item mt-3">
+                        <span class="text-sm font-medium text-gray-700 flex-grow mr-2">Livros digitais (0)</span>
+                         <a href="#" class="download-link flex-shrink-0" title="Baixar livros"> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                         </a>
+                    </div>
+                     <div class="sub-item">
+                        <span class="text-sm font-medium text-gray-700 flex-grow mr-2">Resumos (0)</span>
+                         <a href="#" class="download-link flex-shrink-0" title="Baixar resumos"> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                         </a>
+                    </div>
+                     <div class="sub-item">
+                        <span class="text-sm font-medium text-gray-700 flex-grow mr-2">Slides (0)</span>
+                         <a href="#" class="download-link flex-shrink-0" title="Baixar slides"> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                         </a>
+                    </div>
+                     <div class="sub-item">
+                        <span class="text-sm font-medium text-gray-700 flex-grow mr-2">Mapas mentais (0)</span>
+                         <a href="#" class="download-link flex-shrink-0" title="Baixar mapas mentais"> <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                         </a>
+                    </div>
+                </template>
+
+                <div id="menu-items-list">
+                    </div>
+
+            </div> </div> </main>
+
+    <script>
+        const menuItemsData = [
+            "Atualização - Cetoacidose Diabética", "MPOX", "Critérios de Elegibilidade dos Métodos Anticoncepcionais",
+            "Febre Oropouche e Febre Oropouche na Gestação", "Prevenção da Conjuntivite Neonatal",
+            "Quimioprofilaxia e Vacinação Seletiva na Coqueluche", "Atualização - Vacina HPV",
+            "Atualizações - Diretriz SBD: Diabetes Mellitus", "Atualização - Climatério e Terapia Hormonal: SOBRAC 2024",
+            "Campanha Nacional de Vacinação Contra Poliomielite 2024", "Atualização - GINA 2024: O Que Há de Novo Sobre Asma?",
+            "Atualização - Profilaxia Pós-Exposição HIV", "Nova Diretriz Brasileira de Medida de Pressão Arterial",
+            "Critérios Diagnósticos - Diabetes Mellitus", "Novo Financiamento da APS (Atenção Primária à Saúde)",
+            "Nova Vacina Para Gestantes", "Escore de Sepse de Phoenix - Sepse na Pediatria",
+            "Vacinação Contra Dengue - Ampliação da Faixa Etária", "Vacinação Contra o Coronavirus na Pediatria",
+            "Novo Protocolo de HIV do Ministério da Saúde", "Protocolo de Dengue do Ministério da Saúde",
+            "Clinica Médica - Critérios de SDRA/SARA", "Imunizações: Vacinação de Grupos Especiais",
+            "Dados do Datasus 2022", "Atualização - Tratamento de Diabetes Mellitus Gestacional SBD 2023",
+            "Atualização - Sindrome dos Ovários Policísticos", "Atualizações - Tratamento da Hepatite B",
+            "Novas Recomendações para Suplementação de Micronutrientes em Crianças",
+            "Novo Censo Demográfico e Tendências da População Brasileira", "Mudanças no Tratamento da Sífilis na Gestação",
+            "Dengue na Gestação", "Mudanças no Protocolo Asma do GINA",
+            "Triagem para Homocistinúria Clássica no Teste do Pezinho", "Novos Critérios de Duke para o Diagnóstico de Endocardite",
+            "Mudanças no Protocolo de Pré-Eclâmpsia (2023)", "Atualização - Manejo do Paciente com Diarreia",
+            "Atualização - Vacinação HPV", "Atualização - Lei da Laqueadura", "Atualização no Tratamento de ILTB",
+            "Lista Nacional de Notificação Compulsória", "As Mais Importantes Atualizações Médicas para Residência Médica em 2023"
+        ];
+
+        const menuListContainer = document.getElementById('menu-items-list');
+        const subitemTemplate = document.getElementById('subitem-content-template');
+
+        if (menuListContainer && subitemTemplate) {
+            menuItemsData.forEach((title, index) => {
+                const contentId = `content-${index}-${title.toLowerCase().replace(/[^a-z0-9]/g, '-').substring(0, 30)}`;
+                const accordionItem = document.createElement('div');
+                accordionItem.className = 'accordion-item';
+                accordionItem.setAttribute('data-completed', 'false'); // Estado inicial não concluído
+
+                const headerButton = document.createElement('button');
+                headerButton.className = 'menu-item-header w-full accordion-header';
+                headerButton.setAttribute('aria-expanded', 'false');
+                headerButton.setAttribute('aria-controls', contentId);
+
+                const headerContent = document.createElement('div');
+                headerContent.className = 'text-left flex-grow mr-2 overflow-hidden';
+                // CORRIGIDO: SVG para icon-not-completed agora é apenas um quadrado
+                headerContent.innerHTML = `
+                    <h3 class="text-sm font-medium text-gray-800 truncate">${title}</h3>
+                    <div class="text-xs text-gray-500 mt-1 flex justify-between items-center flex-wrap gap-2">
+                         <span>Estratégia Educacional</span>
+                         <button type="button" class="status-toggle flex-shrink-0">
+                            <span>Concluído</span>
+                            <svg class="icon-not-completed w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="3" width="18" height="18" rx="2" ry="2" stroke-width="1.5"></rect></svg>
+                            <svg class="icon-completed w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                         </button>
+                     </div>`;
+
+                const chevronIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+                chevronIcon.setAttribute('class', 'w-5 h-5 text-gray-500 flex-shrink-0 transition-transform chevron-icon');
+                chevronIcon.setAttribute('fill', 'none');
+                chevronIcon.setAttribute('stroke', 'currentColor');
+                chevronIcon.setAttribute('viewBox', '0 0 24 24');
+                chevronIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>`;
+
+                headerButton.appendChild(headerContent);
+                headerButton.appendChild(chevronIcon);
+
+                const contentDiv = document.createElement('div');
+                contentDiv.id = contentId;
+                contentDiv.className = 'menu-item-content hidden';
+                contentDiv.innerHTML = subitemTemplate.innerHTML;
+
+                accordionItem.appendChild(headerButton);
+                accordionItem.appendChild(contentDiv);
+                menuListContainer.appendChild(accordionItem);
+            });
+
+            // --- Lógica do Acordeão ---
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', (event) => {
+                    if (event.target.closest('.status-toggle')) {
+                        return; // Não faz nada se o clique foi no botão de status
+                    }
+                    const contentId = header.getAttribute('aria-controls');
+                    const content = document.getElementById(contentId);
+                    if (!content) return;
+                    const expanded = header.getAttribute('aria-expanded') === 'true';
+                    const chevronIcon = header.querySelector('.chevron-icon');
+
+                    header.setAttribute('aria-expanded', !expanded);
+                    content.classList.toggle('hidden');
+                     if (chevronIcon) chevronIcon.classList.toggle('rotate-180');
+                });
+            });
+
+            // --- Lógica para Marcar/Desmarcar como Concluído ---
+            const statusToggles = document.querySelectorAll('.status-toggle');
+            statusToggles.forEach(toggle => {
+                toggle.addEventListener('click', (event) => {
+                    event.stopPropagation(); // Impede que o clique propague para o acordeão
+
+                    const accordionItem = toggle.closest('.accordion-item');
+                    if (!accordionItem) return;
+                    const isCompleted = accordionItem.getAttribute('data-completed') === 'true';
+                    accordionItem.setAttribute('data-completed', !isCompleted);
+                    toggle.classList.toggle('is-completed', !isCompleted); // Adiciona/remove a classe para o CSS funcionar
+
+                    console.log(`Item ${accordionItem.querySelector('h3').innerText} marcado como ${!isCompleted ? 'concluído' : 'não concluído'}`);
+                });
+            });
+
+        } else {
+            console.error("Container do menu (#menu-items-list) ou template de subitem (#subitem-content-template) não encontrado no DOM.");
+        }
+    </script>
+
+</body>
+</html>
